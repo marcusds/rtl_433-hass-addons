@@ -27,6 +27,7 @@ RUN mkdir build
 WORKDIR ./build
 RUN cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DINSTALL_UDEV_RULES=OFF -DDETACH_KERNEL_DRIVER=ON
 RUN make -j 4
+RUN make install
 
 WORKDIR /build/root
 WORKDIR /build/rtl-sdr/build
