@@ -1,3 +1,22 @@
+## [1.0.0] - TBD
+
+### Changed
+
+* **BREAKING:** Add-on now runs in privileged mode for full hardware access
+* Switched from Alpine's librtlsdr package to building osmocom rtl-sdr from source (latest main branch)
+
+### Added
+
+* DVB driver unbinding functionality to resolve conflicts with RTL-SDR dongles
+* New configuration option: `dvb_unbind_device` with auto-detect support
+  - Set to `""` (empty string) for auto-detect mode (recommended)
+  - Set to a specific USB device ID (e.g., `"1-1.3:1.0"`) for manual control
+  - Leave unset to disable DVB unbinding
+
+### Fixed
+
+* RTL-SDR dongles being claimed by DVB drivers preventing access
+
 ## [0.6.0] - 2025-03-22
 
 * Update Alpine base to 3.21

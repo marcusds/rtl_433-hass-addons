@@ -10,16 +10,29 @@ RUN apk add --no-cache --virtual .buildDeps \
     libusb-dev \
     hackrf \
     hackrf-dev \
-    librtlsdr-dev \
     soapy-sdr \
     soapy-sdr-dev \
     openssl-dev \
     cmake \
-    git
+    git \
+    pkgconfig
 
 WORKDIR /build
 
-FROM builder as rtl_433_builder
+FROM builder as rtlsdr_builder
+
+RUN git clone https://github.com/osmocom/rtl-sdr.git
+WORKDIR ./rtl-sdr
+RUN mkdir build
+WORKDIR ./build
+RUN cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DINSTALL_UDEV_RULES=OFF -DDETACH_KERNEL_DRIVER=ON
+RUN make -j 4
+
+WORKDIR /build/root
+WORKDIR /build/rtl-sdr/build
+RUN make DESTDIR=/build/root/ install
+
+FROM rtlsdr_builder as rtl_433_builder
 
 RUN git clone https://github.com/merbanan/rtl_433
 WORKDIR ./rtl_433
@@ -50,11 +63,11 @@ ENV LANG C.UTF-8
 
 RUN apk add --no-cache libusb \
     hackrf \
-    librtlsdr \
     soapy-sdr \
     sed
 WORKDIR /root
 COPY --from=rtl_433_builder /build/root/ /
+COPY --from=rtlsdr_builder /build/root/ /
 
 COPY --from=soapy_hackrf_builder /usr/lib /lib-s
 RUN mkdir -p /usr/local/lib/SoapySDR/modules0.8/
