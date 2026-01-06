@@ -35,6 +35,7 @@ RUN make DESTDIR=/build/root/ install
 
 FROM rtlsdr_builder as rtl_433_builder
 
+WORKDIR /build
 RUN git clone https://github.com/merbanan/rtl_433
 WORKDIR ./rtl_433
 
