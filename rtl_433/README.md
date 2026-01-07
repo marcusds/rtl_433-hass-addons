@@ -48,7 +48,7 @@ To find your device ID:
 
 The USB device ID format is `bus-port:config.interface` (example: `1-1.3:1.0`).
 
-**Note:** This feature requires the add-on to run in privileged mode, which is enabled by default in version 1.0.0 and later.
+**Note:** This feature requires the add-on to run with SYS_ADMIN capability for sysfs access, which is enabled by default in version 1.0.0 and later.
 
 ## Installation
 

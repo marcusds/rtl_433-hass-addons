@@ -2,7 +2,7 @@
 
 ### Changed
 
-* **BREAKING:** Add-on now runs in privileged mode for full hardware access
+* **BREAKING:** Add-on now runs with SYS_ADMIN capability for DVB driver unbinding and hardware access
 * Switched from Alpine's librtlsdr package to building osmocom rtl-sdr from source (latest main branch)
 
 ### Added
