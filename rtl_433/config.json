@@ -13,7 +13,7 @@
   "services": ["mqtt:want"],
   "usb": true,
   "udev": true,
-  "privileged": true,
+  "privileged": ["SYS_ADMIN"],
   "options": {
     "rtl_433_conf_file": "",
     "retain": true,
