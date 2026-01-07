@@ -9,9 +9,9 @@
 
 * DVB driver unbinding functionality to resolve conflicts with RTL-SDR dongles
 * New configuration option: `dvb_unbind_device` with auto-detect support
-  - Set to `""` (empty string) for auto-detect mode (recommended)
+  - Set to `"auto"` for auto-detect mode (recommended, default)
   - Set to a specific USB device ID (e.g., `"1-1.3:1.0"`) for manual control
-  - Leave unset to disable DVB unbinding
+  - Leave blank/empty to disable DVB unbinding
 
 ### Fixed
 

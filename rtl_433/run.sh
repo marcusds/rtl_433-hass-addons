@@ -48,13 +48,12 @@ unbind_dvb_driver() {
 }
 
 # Execute unbinding if configured or auto-detect mode
-if [ -n "$dvb_unbind_device" ]; then
-    bashio::log.info "DVB unbind configured: '$dvb_unbind_device'"
-    unbind_dvb_driver "$dvb_unbind_device"
-elif bashio::config.has_value "dvb_unbind_device"; then
-    # Empty string means auto-detect
+if [ "$dvb_unbind_device" = "auto" ]; then
     bashio::log.info "DVB unbind auto-detect mode enabled"
     unbind_dvb_driver ""
+elif [ -n "$dvb_unbind_device" ]; then
+    bashio::log.info "DVB unbind configured: '$dvb_unbind_device'"
+    unbind_dvb_driver "$dvb_unbind_device"
 else
     bashio::log.info "DVB unbinding disabled (not configured)"
 fi

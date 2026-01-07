@@ -17,7 +17,7 @@
   "options": {
     "rtl_433_conf_file": "",
     "retain": true,
-    "dvb_unbind_device": ""
+    "dvb_unbind_device": "auto"
   },
   "schema": {
     "rtl_433_conf_file": "str?",

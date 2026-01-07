@@ -36,11 +36,15 @@ This add-on can automatically handle driver unbinding for you. By default, DVB u
 
 **Option 1: Auto-detect mode (Recommended)**
 
-Set the `dvb_unbind_device` configuration option to an empty string `""`. This will automatically detect and unbind all RTL-SDR devices from DVB drivers at startup.
+Set the `dvb_unbind_device` configuration option to `"auto"`. This will automatically detect and unbind all RTL-SDR devices from DVB drivers at startup.
 
 **Option 2: Manual device specification**
 
 Set `dvb_unbind_device` to a specific USB device ID (e.g., `"1-1.3:1.0"`). This is useful if you have multiple USB devices and only want to unbind a specific one.
+
+**Option 3: Disabled**
+
+Leave the `dvb_unbind_device` field blank/empty to disable DVB unbinding.
 
 To find your device ID:
 1. Enable auto-detect mode and check the add-on logs - detected devices will be logged
