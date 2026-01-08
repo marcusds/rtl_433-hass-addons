@@ -13,12 +13,15 @@
   "services": ["mqtt:want"],
   "usb": true,
   "udev": true,
+  "privileged": ["SYS_ADMIN"],
   "options": {
     "rtl_433_conf_file": "",
-    "retain": true
+    "retain": true,
+    "dvb_unbind_device": "auto"
   },
   "schema": {
     "rtl_433_conf_file": "str?",
-    "retain": "bool"
+    "retain": "bool",
+    "dvb_unbind_device": "str?"
   }
 }

@@ -28,6 +28,28 @@ Once you get the rtl_433 sensor data into MQTT, you'll need to help Home Assista
 
  3. Some wireless sensors supported by rtl_433. The full list of supported protocols and devices can be found under "Supported device protocols" section of the [rtl_433's README](https://github.com/merbanan/rtl_433/blob/master/README.md).
 
+## DVB Driver Configuration (Optional)
+
+By default Home Assistant Operating System loads the default DVB-T driver which doesn't work with newer RTL-SDR Blog devices which require a custom driver.
+
+This add-on can automatically unbind the default loaded driver, using instead the custom driver. By default,unbinding is disabled. To enable it:
+
+**Option 1: Auto-detect mode (Recommended)**
+
+Set the `dvb_unbind_device` configuration option to `"auto"`. This will automatically detect and unbind all RTL-SDR devices from DVB drivers at startup.
+
+**Option 2: Manual device specification**
+
+Set `dvb_unbind_device` to a specific USB device ID (e.g., `"1-1.3:1.0"`). This is useful if you have multiple USB devices and only want to unbind a specific one.
+
+To find your device ID, run `lsusb -t` on your system to see USB device IDs
+The USB device ID format is `bus-port:config.interface` (example: `1-1.3:1.0`).
+
+**Option 3: Disabled (default)**
+
+Leave the `dvb_unbind_device` field blank/empty to disable DVB unbinding.
+
+
 ## Installation
 
  1. Create an rtl_433 config file that does what you need. It might work better if you do this on a computer other than the one running Home Assistant OS, so that you can experiment freely and iterate until you arrive at a configuration that works well. See below for more details.
