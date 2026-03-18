@@ -16,7 +16,7 @@ Once you get the rtl_433 sensor data into MQTT, you'll need to help Home Assista
 
   * manually configure `sensors` and `binary_sensors` in HA and [link them to the appropriate MQTT topics](https://www.home-assistant.io/integrations/sensor.mqtt/) coming out of rtl_433,
   * run the [rtl_433_mqtt_hass.py](https://github.com/merbanan/rtl_433/tree/master/examples/rtl_433_mqtt_hass.py) script manually or on a schedule to do most of the configuration automatically, or
-  * install the [rtl_433 MQTT Auto Discovery Home Assistant Add-on](https://github.com/pbkhrv/rtl_433-hass-addons/tree/main/rtl_433_mqtt_autodiscovery), which runs rtl_433_mqtt_hass.py for you.
+  * install the [rtl_433 MQTT Auto Discovery Home Assistant Add-on](https://github.com/marcusds/rtl_433-hass-addons/tree/main/rtl_433_mqtt_autodiscovery), which runs rtl_433_mqtt_hass.py for you.
 
 ## Prerequisites
 
@@ -27,6 +27,32 @@ Once you get the rtl_433 sensor data into MQTT, you'll need to help Home Assista
  2. Home Assistant OS running on a machine with the SDR dongle plugged into it.
 
  3. Some wireless sensors supported by rtl_433. The full list of supported protocols and devices can be found under "Supported device protocols" section of the [rtl_433's README](https://github.com/merbanan/rtl_433/blob/master/README.md).
+
+## DVB Driver Configuration (Optional)
+
+RTL-SDR dongles are often detected by Linux as DVB-T (Digital Video Broadcasting) devices. When this happens, the kernel's DVB driver automatically binds to the device, preventing rtl_433 from accessing it. This is a common issue that can prevent your SDR dongle from working.
+
+This add-on can automatically handle driver unbinding for you. By default, DVB unbinding is disabled. To enable it:
+
+**Option 1: Auto-detect mode (Recommended)**
+
+Set the `dvb_unbind_device` configuration option to `"auto"`. This will automatically detect and unbind all RTL-SDR devices from DVB drivers at startup.
+
+**Option 2: Manual device specification**
+
+Set `dvb_unbind_device` to a specific USB device ID (e.g., `"1-1.3:1.0"`). This is useful if you have multiple USB devices and only want to unbind a specific one.
+
+**Option 3: Disabled**
+
+Leave the `dvb_unbind_device` field blank/empty to disable DVB unbinding.
+
+To find your device ID:
+1. Enable auto-detect mode and check the add-on logs - detected devices will be logged
+2. Alternatively, you can run `lsusb -t` on your system to see USB device IDs
+
+The USB device ID format is `bus-port:config.interface` (example: `1-1.3:1.0`).
+
+**Note:** This feature requires the add-on to run with SYS_ADMIN capability for sysfs access, which is enabled by default in version 1.0.0 and later.
 
 ## Installation
 

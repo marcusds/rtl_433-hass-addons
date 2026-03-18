@@ -1,5 +1,63 @@
 #!/usr/bin/with-contenv bashio
 
+# DVB driver unbinding logic
+dvb_unbind_device=$(bashio::config "dvb_unbind_device")
+
+unbind_dvb_driver() {
+    local device_id="$1"
+    local driver_path
+
+    # List of DVB drivers to check
+    local dvb_drivers=("dvb_usb_rtl28xxu" "rtl2832" "rtl2830")
+
+    for driver in "${dvb_drivers[@]}"; do
+        driver_path="/sys/bus/usb/drivers/$driver"
+
+        if [ ! -d "$driver_path" ]; then
+            continue
+        fi
+
+        # If device_id specified, unbind that specific device
+        if [ -n "$device_id" ]; then
+            if [ -e "$driver_path/$device_id" ]; then
+                bashio::log.info "Unbinding DVB driver $driver from device $device_id"
+                if echo -n "$device_id" > "$driver_path/unbind" 2>/dev/null; then
+                    bashio::log.info "Successfully unbound $device_id from $driver"
+                    return 0
+                else
+                    bashio::log.warning "Failed to unbind $device_id from $driver"
+                fi
+            fi
+        else
+            # Auto-detect: unbind all devices bound to this driver
+            for device_link in "$driver_path"/*:*.*; do
+                if [ -L "$device_link" ]; then
+                    local device=$(basename "$device_link")
+                    bashio::log.info "Auto-detected DVB device $device on driver $driver"
+                    if echo -n "$device" > "$driver_path/unbind" 2>/dev/null; then
+                        bashio::log.info "Successfully unbound $device from $driver"
+                    else
+                        bashio::log.warning "Failed to unbind $device from $driver"
+                    fi
+                fi
+            done
+        fi
+    done
+
+    return 0
+}
+
+# Execute unbinding if configured or auto-detect mode
+if [ "$dvb_unbind_device" = "auto" ]; then
+    bashio::log.info "DVB unbind auto-detect mode enabled"
+    unbind_dvb_driver ""
+elif [ -n "$dvb_unbind_device" ]; then
+    bashio::log.info "DVB unbind configured: '$dvb_unbind_device'"
+    unbind_dvb_driver "$dvb_unbind_device"
+else
+    bashio::log.info "DVB unbinding disabled (not configured)"
+fi
+
 conf_directory="/config/rtl_433"
 
 if bashio::services.available "mqtt"; then
